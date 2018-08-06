@@ -3,3 +3,22 @@ spring:
     banner-mode: "off"
   jackson:
     date-format: com.fasterxml.jackson.databind.util.ISO8601DateFormat
+
+server:
+  port: 8443
+  ssl:
+    key-store: keystore.p12
+    key-store-password: password
+    key-store-type: PKCS12
+    key-alias: tomcat
+
+security:
+  oauth2:
+    client:
+      accessTokenUri: https://graph.facebook.com/oauth/access_token
+      userAuthorizationUri: https://www.facebook.com/dialog/oauth
+      tokenName: oauth_token
+      authenticationScheme: query
+      clientAuthenticationScheme: form
+    resource:
+      userInfoUri: https://graph.facebook.com/me?fields=id,name,picture
