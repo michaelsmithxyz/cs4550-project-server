@@ -13,7 +13,9 @@ import org.springframework.security.oauth2.client.filter.OAuth2ClientAuthenticat
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("/").permitAll()
-            .anyRequest().authenticated();
+        http.csrf().disable().
+            authorizeRequests()
+                .antMatchers("/").permitAll()
+                .anyRequest().authenticated();
     }
 }
