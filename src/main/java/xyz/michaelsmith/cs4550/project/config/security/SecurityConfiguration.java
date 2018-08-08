@@ -12,16 +12,24 @@ import xyz.michaelsmith.cs4550.project.user.data.UserRepository;
 @Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final UserRepository userRepository;
+    private final FacebookAuthenticationSuccessHandler facebookAuthenticationSuccessHandler;
 
     @Autowired
-    public SecurityConfiguration(UserRepository userRepository) {
+    public SecurityConfiguration(UserRepository userRepository, FacebookAuthenticationSuccessHandler facebookAuthenticationSuccessHandler) {
         this.userRepository = userRepository;
+        this.facebookAuthenticationSuccessHandler = facebookAuthenticationSuccessHandler;
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable().authorizeRequests()
-                                .antMatchers("/api/**").permitAll();
+        http.csrf().disable()
+            .headers()
+                .frameOptions().disable()
+            .and().formLogin()
+                .successHandler(facebookAuthenticationSuccessHandler)
+            .and().authorizeRequests()
+                .antMatchers("/login").permitAll()
+                .antMatchers("/api/**").authenticated();
     }
 
     @Override

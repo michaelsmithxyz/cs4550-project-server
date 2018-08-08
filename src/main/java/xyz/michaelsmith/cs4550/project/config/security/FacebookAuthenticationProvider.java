@@ -11,6 +11,8 @@ import org.springframework.social.facebook.api.User;
 import org.springframework.social.facebook.api.impl.FacebookTemplate;
 import xyz.michaelsmith.cs4550.project.user.data.UserRepository;
 
+import java.util.Collections;
+
 public class FacebookAuthenticationProvider implements AuthenticationProvider {
 
     private final UserRepository userRepository;
@@ -30,10 +32,11 @@ public class FacebookAuthenticationProvider implements AuthenticationProvider {
 
         Facebook facebookApi = new FacebookTemplate(fbToken);
         try {
-            User facebookUser = facebookApi.userOperations().getUserProfile();
+            String [] fields = { "id", "email", "name" };
+            User facebookUser = facebookApi.fetchObject("me", User.class, fields);
             if (facebookUser.getId().equalsIgnoreCase(fbId)) {
                 xyz.michaelsmith.cs4550.project.user.data.entity.User appUser = getOrCreateAppUser(facebookUser);
-                return new UsernamePasswordAuthenticationToken(appUser, fbToken);
+                return new UsernamePasswordAuthenticationToken(appUser, fbToken, Collections.emptyList());
             }
             throw new BadCredentialsException("Cannot authenticate to Facebook");
         } catch (ApiException ex) {
