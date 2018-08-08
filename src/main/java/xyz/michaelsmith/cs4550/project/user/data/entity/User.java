@@ -1,16 +1,13 @@
 package xyz.michaelsmith.cs4550.project.user.data.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long facebookId;
+    private String facebookId;
     private String name;
     private String profilePictureUrl;
 
@@ -22,11 +19,11 @@ public class User {
         this.id = id;
     }
 
-    public Long getFacebookId() {
+    public String getFacebookId() {
         return facebookId;
     }
 
-    public void setFacebookId(Long facebookId) {
+    public void setFacebookId(String facebookId) {
         this.facebookId = facebookId;
     }
 

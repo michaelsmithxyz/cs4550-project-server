@@ -1,0 +1,60 @@
+package xyz.michaelsmith.cs4550.project.config.security;
+
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.social.ApiException;
+import org.springframework.social.facebook.api.Facebook;
+import org.springframework.social.facebook.api.User;
+import org.springframework.social.facebook.api.impl.FacebookTemplate;
+import xyz.michaelsmith.cs4550.project.user.data.UserRepository;
+
+public class FacebookAuthenticationProvider implements AuthenticationProvider {
+
+    private final UserRepository userRepository;
+
+    public FacebookAuthenticationProvider(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    @Override
+    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+        String fbId = authentication.getName();
+        String fbToken = authentication.getCredentials().toString();
+
+        if (fbId == null || fbToken == null) {
+            throw new BadCredentialsException("Invalid Facebook id or token");
+        }
+
+        Facebook facebookApi = new FacebookTemplate(fbToken);
+        try {
+            User facebookUser = facebookApi.userOperations().getUserProfile();
+            if (facebookUser.getId().equalsIgnoreCase(fbId)) {
+                xyz.michaelsmith.cs4550.project.user.data.entity.User appUser = getOrCreateAppUser(facebookUser);
+                return new UsernamePasswordAuthenticationToken(appUser, fbToken);
+            }
+            throw new BadCredentialsException("Cannot authenticate to Facebook");
+        } catch (ApiException ex) {
+            throw new BadCredentialsException(ex.getMessage());
+        }
+    }
+
+
+    private xyz.michaelsmith.cs4550.project.user.data.entity.User getOrCreateAppUser(User facebookUser) {
+        xyz.michaelsmith.cs4550.project.user.data.entity.User appUser = userRepository.getByFacebookId(facebookUser.getId());
+        if (appUser == null) {
+            appUser = new xyz.michaelsmith.cs4550.project.user.data.entity.User();
+            appUser.setFacebookId(facebookUser.getId());
+            appUser.setName(facebookUser.getName());
+            return userRepository.save(appUser);
+        }
+        return appUser;
+    }
+
+    @Override
+    public boolean supports(Class<?> aClass) {
+        return UsernamePasswordAuthenticationToken.class.isAssignableFrom(aClass);
+    }
+}
