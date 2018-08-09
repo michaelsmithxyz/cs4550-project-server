@@ -25,6 +25,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
             .headers()
                 .frameOptions().disable()
+            .and().exceptionHandling()
+                .authenticationEntryPoint(new UnauthorizedAuthenticationEntryPoint())
             .and().formLogin()
                 .successHandler(facebookAuthenticationSuccessHandler)
             .and().authorizeRequests()
