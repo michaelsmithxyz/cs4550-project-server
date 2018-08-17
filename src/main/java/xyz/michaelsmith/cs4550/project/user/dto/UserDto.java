@@ -4,6 +4,7 @@ public class UserDto {
     private Long id;
     private Long facebookId;
     private String name;
+    private String role;
 
     public Long getId() {
         return id;
@@ -27,5 +28,13 @@ public class UserDto {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

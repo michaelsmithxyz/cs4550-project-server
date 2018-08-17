@@ -8,6 +8,10 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String facebookId;
+
+    @Enumerated(EnumType.STRING)
+    private UserRole role = UserRole.DEFAULT;
+
     private String name;
     @Lob
     private byte[] profilePicture;
@@ -42,5 +46,13 @@ public class User {
 
     public void setProfilePicture(byte[] profilePicture) {
         this.profilePicture = profilePicture;
+    }
+
+    public UserRole getRole() {
+        return role;
+    }
+
+    public void setRole(UserRole role) {
+        this.role = role;
     }
 }
