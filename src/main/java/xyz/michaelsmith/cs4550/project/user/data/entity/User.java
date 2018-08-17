@@ -9,7 +9,8 @@ public class User {
     private Long id;
     private String facebookId;
     private String name;
-    private String profilePictureUrl;
+    @Lob
+    private byte[] profilePicture;
 
     public Long getId() {
         return id;
@@ -35,11 +36,11 @@ public class User {
         this.name = name;
     }
 
-    public String getProfilePictureUrl() {
-        return profilePictureUrl;
+    public byte[] getProfilePicture() {
+        return profilePicture;
     }
 
-    public void setProfilePictureUrl(String profilePictureUrl) {
-        this.profilePictureUrl = profilePictureUrl;
+    public void setProfilePicture(byte[] profilePicture) {
+        this.profilePicture = profilePicture;
     }
 }

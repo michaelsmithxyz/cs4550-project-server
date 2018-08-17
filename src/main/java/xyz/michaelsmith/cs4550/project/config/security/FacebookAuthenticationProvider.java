@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.social.ApiException;
 import org.springframework.social.facebook.api.Facebook;
+import org.springframework.social.facebook.api.ImageType;
 import org.springframework.social.facebook.api.User;
 import org.springframework.social.facebook.api.impl.FacebookTemplate;
 import xyz.michaelsmith.cs4550.project.user.data.UserRepository;
@@ -35,7 +36,7 @@ public class FacebookAuthenticationProvider implements AuthenticationProvider {
             String [] fields = { "id", "email", "name" };
             User facebookUser = facebookApi.fetchObject("me", User.class, fields);
             if (facebookUser.getId().equalsIgnoreCase(fbId)) {
-                xyz.michaelsmith.cs4550.project.user.data.entity.User appUser = getOrCreateAppUser(facebookUser);
+                xyz.michaelsmith.cs4550.project.user.data.entity.User appUser = getOrCreateAppUser(facebookUser, facebookApi);
                 return new UsernamePasswordAuthenticationToken(appUser, fbToken, Collections.emptyList());
             }
             throw new BadCredentialsException("Cannot authenticate to Facebook");
@@ -45,12 +46,13 @@ public class FacebookAuthenticationProvider implements AuthenticationProvider {
     }
 
 
-    private xyz.michaelsmith.cs4550.project.user.data.entity.User getOrCreateAppUser(User facebookUser) {
+    private xyz.michaelsmith.cs4550.project.user.data.entity.User getOrCreateAppUser(User facebookUser, Facebook facebook) {
         xyz.michaelsmith.cs4550.project.user.data.entity.User appUser = userRepository.getByFacebookId(facebookUser.getId());
         if (appUser == null) {
             appUser = new xyz.michaelsmith.cs4550.project.user.data.entity.User();
             appUser.setFacebookId(facebookUser.getId());
             appUser.setName(facebookUser.getName());
+            appUser.setProfilePicture(facebook.userOperations().getUserProfileImage(ImageType.LARGE));
             return userRepository.save(appUser);
         }
         return appUser;
