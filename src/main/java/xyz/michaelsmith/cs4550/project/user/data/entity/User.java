@@ -1,8 +1,10 @@
 package xyz.michaelsmith.cs4550.project.user.data.entity;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
+@Table(name = "app_user")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,6 +17,18 @@ public class User {
     private String name;
     @Lob
     private byte[] profilePicture;
+
+    @ManyToMany
+    @JoinTable(name = "user_follower_map",
+               joinColumns = @JoinColumn(name = "target_id"),
+               inverseJoinColumns = @JoinColumn(name = "follower_id"))
+    private List<User> followedBy;
+
+    @ManyToMany
+    @JoinTable(name = "user_follower_map",
+               joinColumns = @JoinColumn(name = "follower_id"),
+               inverseJoinColumns = @JoinColumn(name = "target_id"))
+    private List<User> following;
 
     public Long getId() {
         return id;
@@ -54,5 +68,21 @@ public class User {
 
     public void setRole(UserRole role) {
         this.role = role;
+    }
+
+    public List<User> getFollowedBy() {
+        return followedBy;
+    }
+
+    public void setFollowedBy(List<User> followedBy) {
+        this.followedBy = followedBy;
+    }
+
+    public List<User> getFollowing() {
+        return following;
+    }
+
+    public void setFollowing(List<User> following) {
+        this.following = following;
     }
 }

@@ -3,10 +3,12 @@ package xyz.michaelsmith.cs4550.project.config.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import xyz.michaelsmith.cs4550.project.user.data.UserRepository;
 
 @Configuration
@@ -29,6 +31,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(new UnauthorizedAuthenticationEntryPoint())
             .and().formLogin()
                 .successHandler(facebookAuthenticationSuccessHandler)
+            .and().logout()
+                .logoutUrl("/logout")
+                .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK))
             .and().authorizeRequests()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/api/**").authenticated();
