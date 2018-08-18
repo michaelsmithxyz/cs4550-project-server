@@ -74,4 +74,12 @@ public class Recipe {
     public void setSteps(List<RecipeStep> steps) {
         this.steps = steps;
     }
+
+    public List<RecipeIngredientMap> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(List<RecipeIngredientMap> ingredients) {
+        this.ingredients = ingredients;
+    }
 }

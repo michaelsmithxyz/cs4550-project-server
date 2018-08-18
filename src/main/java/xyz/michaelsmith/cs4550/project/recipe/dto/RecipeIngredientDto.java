@@ -4,7 +4,7 @@ public class RecipeIngredientDto {
     private Long ingredientId;
     private String ingredient;
     private String quantity;
-    private String modifer;
+    private String modifier;
 
     public Long getIngredientId() {
         return ingredientId;
@@ -30,11 +30,11 @@ public class RecipeIngredientDto {
         this.quantity = quantity;
     }
 
-    public String getModifer() {
-        return modifer;
+    public String getModifier() {
+        return modifier;
     }
 
-    public void setModifer(String modifer) {
-        this.modifer = modifer;
+    public void setModifier(String modifier) {
+        this.modifier = modifier;
     }
 }

@@ -9,7 +9,7 @@ public class RecipeDto {
     private String title;
     private UserDto author;
     private String duration;
-    private String yeild;
+    private String yield;
 
     private List<RecipeIngredientDto> ingredients;
     private List<RecipeStepDto> steps;
@@ -46,12 +46,12 @@ public class RecipeDto {
         this.duration = duration;
     }
 
-    public String getYeild() {
-        return yeild;
+    public String getYield() {
+        return yield;
     }
 
-    public void setYeild(String yeild) {
-        this.yeild = yeild;
+    public void setYield(String yield) {
+        this.yield = yield;
     }
 
     public List<RecipeIngredientDto> getIngredients() {
