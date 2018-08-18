@@ -12,6 +12,7 @@ import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.IMAGE_JPEG_VALUE;
+import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
@@ -36,7 +37,7 @@ public class UserApiController {
     }
 
     @RequestMapping(path = "/me/following/{userId}",
-            method = PUT)
+                    method = PUT)
     public void followUser(@PathVariable("userId") Long userId) {
         try {
             UserDto loggedInUser = userService.getUser();
@@ -46,7 +47,17 @@ public class UserApiController {
         }
     }
 
-    
+    @RequestMapping(path = "/me/following/{userId}",
+                    method = DELETE)
+    public void unfollowUser(@PathVariable("userId") Long userId) {
+        try {
+            UserDto loggedInUser = userService.getUser();
+            userService.deleteFollowMapping(loggedInUser.getId(), userId);
+        } catch (IllegalArgumentException ex) {
+            throw new ResourceNotFoundException(ex.getMessage());
+        }
+    }
+
     // General User operations
 
     @RequestMapping(path = "/{userId}",

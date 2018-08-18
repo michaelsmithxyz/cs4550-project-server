@@ -53,6 +53,12 @@ public class UserService {
         userRepository.save(followingUser);
     }
 
+    public void deleteFollowMapping(Long followingUserId, Long targetUserId) {
+        User followingUser = userRepository.findById(followingUserId).orElseThrow(USER_NOT_FOUND_EXCEPTION);
+        followingUser.getFollowing().removeIf(u -> u.getId().equals(targetUserId));
+        userRepository.save(followingUser);
+    }
+
     public byte[] getUserProfilePicture(Long userId) {
         return userRepository.findById(userId).map(User::getProfilePicture).orElse(null);
     }
