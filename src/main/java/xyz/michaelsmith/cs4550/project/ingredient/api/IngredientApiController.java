@@ -3,6 +3,7 @@ package xyz.michaelsmith.cs4550.project.ingredient.api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import xyz.michaelsmith.cs4550.project.common.api.exception.BadRequestException;
 import xyz.michaelsmith.cs4550.project.common.api.exception.ResourceNotFoundException;
 import xyz.michaelsmith.cs4550.project.ingredient.dto.IngredientDto;
 import xyz.michaelsmith.cs4550.project.ingredient.service.IngredientService;
@@ -11,6 +12,7 @@ import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @RestController
 @RequestMapping("/api/ingredient")
@@ -39,5 +41,17 @@ public class IngredientApiController {
                     produces = APPLICATION_JSON_VALUE)
     public List<IngredientDto> searchIngredients(@RequestParam("search") String query) {
         return ingredientService.searchIngredients(query);
+    }
+
+    @RequestMapping(path = {"", "/"},
+                    method = POST,
+                    consumes = APPLICATION_JSON_VALUE,
+                    produces = APPLICATION_JSON_VALUE)
+    public IngredientDto createIngredient(@RequestBody IngredientDto ingredientDto) {
+        try {
+            return ingredientService.createIngredient(ingredientDto);
+        } catch (Exception ex) {
+            throw new BadRequestException(ex.getMessage());
+        }
     }
 }

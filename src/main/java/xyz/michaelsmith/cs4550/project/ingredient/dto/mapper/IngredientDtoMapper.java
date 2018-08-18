@@ -22,4 +22,9 @@ public class IngredientDtoMapper implements DtoMapper<Ingredient, IngredientDto>
     public IngredientDto map(Ingredient entity) {
         return mapperFacade.map(entity);
     }
+
+    @Override
+    public Ingredient mapReverse(IngredientDto dto) {
+        return mapperFacade.mapReverse(dto);
+    }
 }

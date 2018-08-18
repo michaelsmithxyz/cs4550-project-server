@@ -31,4 +31,12 @@ public class IngredientService {
     public List<IngredientDto> searchIngredients(String query) {
         return ingredientRepository.findByNameContainingIgnoreCase(query).stream().map(ingredientDtoMapper::map).collect(toList());
     }
+
+    public IngredientDto createIngredient(IngredientDto ingredientDto) {
+        Ingredient ingredient = ingredientDtoMapper.mapReverse(ingredientDto);
+        if (ingredient.getId() != null) {
+            throw new IllegalArgumentException("Cannot create ingredient with an id");
+        }
+        return ingredientDtoMapper.map(ingredientRepository.save(ingredient));
+    }
 }
