@@ -13,6 +13,7 @@ import java.util.List;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
 @RestController
 @RequestMapping("/api/recipe")
@@ -48,6 +49,18 @@ public class RecipeApiController {
     public RecipeDto createRecipe(@RequestBody RecipeDto recipeDto) {
         try {
             return recipeService.createRecipe(recipeDto);
+        } catch (IllegalArgumentException ex) {
+            throw new ResourceNotFoundException(ex.getMessage());
+        }
+    }
+
+    @RequestMapping(path = "/{recipeId}",
+                    method = PUT,
+                    consumes = APPLICATION_JSON_VALUE,
+                    produces = APPLICATION_JSON_VALUE)
+    public RecipeDto updateRecipe(@PathVariable("recipeId") Long recipeId, @RequestBody RecipeDto recipeDto) {
+        try {
+            return recipeService.updateRecipe(recipeId, recipeDto);
         } catch (IllegalArgumentException ex) {
             throw new ResourceNotFoundException(ex.getMessage());
         }

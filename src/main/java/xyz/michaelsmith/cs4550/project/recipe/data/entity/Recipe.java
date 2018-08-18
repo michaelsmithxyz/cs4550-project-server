@@ -22,10 +22,10 @@ public class Recipe {
     private String duration;
     private String yield;
 
-    @OneToMany(mappedBy = "recipe", orphanRemoval = true, cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "recipe", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<RecipeIngredientMap> ingredients = new ArrayList<>();
 
-    @OneToMany(mappedBy = "recipe", orphanRemoval = true, cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "recipe", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<RecipeStep> steps = new ArrayList<>();
 
     public Long getId() {

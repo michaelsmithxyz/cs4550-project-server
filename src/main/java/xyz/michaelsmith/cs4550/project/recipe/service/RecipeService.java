@@ -53,15 +53,31 @@ public class RecipeService {
         recipe.setAuthor(currentUser);
         recipe.setDuration(recipeDto.getDuration());
         recipe.setYield(recipeDto.getYield());
-        recipeDto.getIngredients().forEach(ingredientDto -> {
-            RecipeIngredientMap ingredientMap = new RecipeIngredientMap();
-            ingredientMap.setIngredient(ingredientService.getIngredientEntity(ingredientDto.getIngredientId()));
-            ingredientMap.setModifier(ingredientDto.getModifier());
-            ingredientMap.setQuantity(ingredientDto.getQuantity());
-            recipe.addIngredient(ingredientMap);
-        });
+
+        buildRecipeIngredients(recipe, recipeDto);
 
         recipe.setSteps(new ArrayList<>());
+        buildRecipeSteps(recipe, recipeDto);
+
+        return recipeDtoMapper.map(recipeRepository.save(recipe));
+    }
+
+    public RecipeDto updateRecipe(Long recipeId, RecipeDto recipeDto) {
+        Recipe recipe = recipeRepository.findById(recipeId).orElseThrow(RECIPE_NOT_FOUND);
+        recipe.setTitle(recipeDto.getTitle());
+        recipe.setDuration(recipeDto.getDuration());
+        recipe.setYield(recipeDto.getYield());
+
+        recipe.getSteps().clear();
+        buildRecipeSteps(recipe, recipeDto);
+
+        recipe.getIngredients().clear();
+        buildRecipeIngredients(recipe, recipeDto);
+
+        return recipeDtoMapper.map(recipeRepository.save(recipe));
+    }
+
+    private static void buildRecipeSteps(Recipe recipe, RecipeDto recipeDto) {
         for (int i = 0; i < recipeDto.getSteps().size(); i++) {
             RecipeStepDto stepDto = recipeDto.getSteps().get(i);
             RecipeStep step = new RecipeStep();
@@ -69,7 +85,15 @@ public class RecipeService {
             step.setSortOrder(i);
             recipe.addStep(step);
         }
+    }
 
-        return recipeDtoMapper.map(recipeRepository.save(recipe));
+    private void buildRecipeIngredients(Recipe recipe, RecipeDto recipeDto) {
+        recipeDto.getIngredients().forEach(ingredientDto -> {
+            RecipeIngredientMap ingredientMap = new RecipeIngredientMap();
+            ingredientMap.setIngredient(ingredientService.getIngredientEntity(ingredientDto.getIngredientId()));
+            ingredientMap.setModifier(ingredientDto.getModifier());
+            ingredientMap.setQuantity(ingredientDto.getQuantity());
+            recipe.addIngredient(ingredientMap);
+        });
     }
 }
