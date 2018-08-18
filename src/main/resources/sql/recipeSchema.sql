@@ -13,3 +13,10 @@ CREATE TABLE recipe_ingredient_map (
   quantity VARCHAR(255),
   modifier VARCHAR(255)
 );
+
+CREATE TABLE recipe_step (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  recipe_id INT REFERENCES recipe,
+  sort_order INT NOT NULL,
+  text TEXT NOT NULL
+);

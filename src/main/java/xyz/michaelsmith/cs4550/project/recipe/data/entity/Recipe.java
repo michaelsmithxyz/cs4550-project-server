@@ -15,7 +15,7 @@ public class Recipe {
     private String title;
 
     @ManyToOne
-    @JoinColumn(name = "author-id")
+    @JoinColumn(name = "author_id")
     private User author;
 
     private String duration;
@@ -23,6 +23,9 @@ public class Recipe {
 
     @OneToMany(mappedBy = "recipe", orphanRemoval = true)
     private List<RecipeIngredientMap> ingredients;
+
+    @OneToMany(mappedBy = "recipe", orphanRemoval = true)
+    private List<RecipeStep> steps;
 
     public Long getId() {
         return id;
@@ -62,5 +65,13 @@ public class Recipe {
 
     public void setYield(String yield) {
         this.yield = yield;
+    }
+
+    public List<RecipeStep> getSteps() {
+        return steps;
+    }
+
+    public void setSteps(List<RecipeStep> steps) {
+        this.steps = steps;
     }
 }
