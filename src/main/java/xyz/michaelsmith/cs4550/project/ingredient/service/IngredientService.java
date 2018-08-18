@@ -28,6 +28,10 @@ public class IngredientService {
         return ingredientRepository.findById(ingredientId).map(ingredientDtoMapper::map).orElseThrow(INGREDIENT_NOT_FOUND);
     }
 
+    public Ingredient getIngredientEntity(Long ingredientId) {
+        return ingredientRepository.findById(ingredientId).orElseThrow(INGREDIENT_NOT_FOUND);
+    }
+
     public List<IngredientDto> searchIngredients(String query) {
         return ingredientRepository.findByNameContainingIgnoreCase(query).stream().map(ingredientDtoMapper::map).collect(toList());
     }

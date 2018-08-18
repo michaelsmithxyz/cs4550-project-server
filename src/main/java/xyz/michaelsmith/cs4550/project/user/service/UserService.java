@@ -31,6 +31,10 @@ public class UserService {
         return userDtoMapper.map((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
     }
 
+    public User getUserEntity() {
+        return userRepository.findById(this.getUser().getId()).orElseThrow(USER_NOT_FOUND_EXCEPTION);
+    }
+
     public UserDto getUser(Long userId) {
         return userRepository.findById(userId).map(userDtoMapper::map).orElseThrow(USER_NOT_FOUND_EXCEPTION);
     }

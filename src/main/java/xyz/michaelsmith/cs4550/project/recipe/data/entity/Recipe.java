@@ -3,6 +3,7 @@ package xyz.michaelsmith.cs4550.project.recipe.data.entity;
 import xyz.michaelsmith.cs4550.project.user.data.entity.User;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -21,11 +22,11 @@ public class Recipe {
     private String duration;
     private String yield;
 
-    @OneToMany(mappedBy = "recipe", orphanRemoval = true)
-    private List<RecipeIngredientMap> ingredients;
+    @OneToMany(mappedBy = "recipe", orphanRemoval = true, cascade = CascadeType.PERSIST)
+    private List<RecipeIngredientMap> ingredients = new ArrayList<>();
 
-    @OneToMany(mappedBy = "recipe", orphanRemoval = true)
-    private List<RecipeStep> steps;
+    @OneToMany(mappedBy = "recipe", orphanRemoval = true, cascade = CascadeType.PERSIST)
+    private List<RecipeStep> steps = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -75,11 +76,21 @@ public class Recipe {
         this.steps = steps;
     }
 
+    public void addStep(RecipeStep step) {
+        this.steps.add(step);
+        step.setRecipe(this);
+    }
+
     public List<RecipeIngredientMap> getIngredients() {
         return ingredients;
     }
 
     public void setIngredients(List<RecipeIngredientMap> ingredients) {
         this.ingredients = ingredients;
+    }
+
+    public void addIngredient(RecipeIngredientMap ingredient) {
+        this.ingredients.add(ingredient);
+        ingredient.setRecipe(this);
     }
 }
