@@ -40,6 +40,7 @@ public class RecipeDtoMapper implements DtoMapper<Recipe, RecipeDto> {
     public RecipeDto map(Recipe entity) {
         RecipeDto dto = mapperFacade.map(entity);
         dto.setAuthor(userMapper.map(entity.getAuthor()));
+        dto.getAuthor().setFacebookId(null);
         dto.setIngredients(entity.getIngredients().stream().map(ingredientMapper::map).collect(toList()));
         dto.setSteps(entity.getSteps().stream().map(stepMapper::map).collect(toList()));
         return dto;
