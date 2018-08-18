@@ -5,6 +5,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.social.ApiException;
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.social.facebook.api.ImageType;
@@ -12,7 +13,7 @@ import org.springframework.social.facebook.api.User;
 import org.springframework.social.facebook.api.impl.FacebookTemplate;
 import xyz.michaelsmith.cs4550.project.user.data.UserRepository;
 
-import java.util.Collections;
+import static java.util.Collections.singletonList;
 
 public class FacebookAuthenticationProvider implements AuthenticationProvider {
 
@@ -37,7 +38,7 @@ public class FacebookAuthenticationProvider implements AuthenticationProvider {
             User facebookUser = facebookApi.fetchObject("me", User.class, fields);
             if (facebookUser.getId().equalsIgnoreCase(fbId)) {
                 xyz.michaelsmith.cs4550.project.user.data.entity.User appUser = getOrCreateAppUser(facebookUser, facebookApi);
-                return new UsernamePasswordAuthenticationToken(appUser, fbToken, Collections.emptyList());
+                return new UsernamePasswordAuthenticationToken(appUser, fbToken, singletonList(new SimpleGrantedAuthority(appUser.getRole().name())));
             }
             throw new BadCredentialsException("Cannot authenticate to Facebook");
         } catch (ApiException ex) {

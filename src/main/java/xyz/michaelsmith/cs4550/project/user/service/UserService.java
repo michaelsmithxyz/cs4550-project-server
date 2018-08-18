@@ -1,16 +1,21 @@
 package xyz.michaelsmith.cs4550.project.user.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import xyz.michaelsmith.cs4550.project.common.dto.mapper.DtoMapper;
 import xyz.michaelsmith.cs4550.project.user.data.UserRepository;
 import xyz.michaelsmith.cs4550.project.user.data.entity.User;
+import xyz.michaelsmith.cs4550.project.user.data.entity.UserRole;
 import xyz.michaelsmith.cs4550.project.user.dto.UserDto;
 
 import java.util.List;
 import java.util.function.Supplier;
 
+import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 
 @Service
@@ -29,6 +34,14 @@ public class UserService {
 
     public UserDto getUser() {
         return userDtoMapper.map((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+    }
+
+    public void updateUserRole(UserRole role) {
+        User user = userRepository.findById(((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId()).orElseThrow(USER_NOT_FOUND_EXCEPTION);
+        user.setRole(role);
+        user = userRepository.save(user);
+        Authentication auth = new UsernamePasswordAuthenticationToken(user, SecurityContextHolder.getContext().getAuthentication().getCredentials(), singletonList(new SimpleGrantedAuthority(user.getRole().name())));
+        SecurityContextHolder.getContext().setAuthentication(auth);
     }
 
     public User getUserEntity() {

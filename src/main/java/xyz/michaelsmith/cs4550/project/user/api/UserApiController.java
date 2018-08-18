@@ -2,10 +2,12 @@ package xyz.michaelsmith.cs4550.project.user.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import xyz.michaelsmith.cs4550.project.common.api.exception.ResourceNotFoundException;
 import xyz.michaelsmith.cs4550.project.user.dto.UserDto;
+import xyz.michaelsmith.cs4550.project.user.dto.UserRoleDto;
 import xyz.michaelsmith.cs4550.project.user.service.UserService;
 
 import java.util.List;
@@ -30,10 +32,17 @@ public class UserApiController {
     // Logged-in User Operations
 
     @RequestMapping(path = "/me",
-            method = GET,
-            produces = APPLICATION_JSON_VALUE)
+                    method = GET,
+                    produces = APPLICATION_JSON_VALUE)
     public UserDto getLoggedInUserInfo() {
         return userService.getUser();
+    }
+
+    @RequestMapping(path = "/me/role",
+                    method = PUT,
+                    consumes = APPLICATION_JSON_VALUE)
+    public void updateUserRole(@RequestBody UserRoleDto role) {
+        userService.updateUserRole(role.getRole());
     }
 
     @RequestMapping(path = "/me/following/{userId}",
