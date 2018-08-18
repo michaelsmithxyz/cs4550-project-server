@@ -77,6 +77,10 @@ public class RecipeService {
         return recipeDtoMapper.map(recipeRepository.save(recipe));
     }
 
+    public void deleteRecipe(Long recipeId) {
+        recipeRepository.deleteById(recipeId);
+    }
+
     private static void buildRecipeSteps(Recipe recipe, RecipeDto recipeDto) {
         for (int i = 0; i < recipeDto.getSteps().size(); i++) {
             RecipeStepDto stepDto = recipeDto.getSteps().get(i);

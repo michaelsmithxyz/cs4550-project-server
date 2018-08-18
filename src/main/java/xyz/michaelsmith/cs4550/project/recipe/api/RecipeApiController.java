@@ -11,9 +11,7 @@ import xyz.michaelsmith.cs4550.project.recipe.service.RecipeService;
 import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
-import static org.springframework.web.bind.annotation.RequestMethod.PUT;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @RestController
 @RequestMapping("/api/recipe")
@@ -64,5 +62,11 @@ public class RecipeApiController {
         } catch (IllegalArgumentException ex) {
             throw new ResourceNotFoundException(ex.getMessage());
         }
+    }
+
+    @RequestMapping(path = "/{recipeId}",
+                    method = DELETE)
+    public void deleteRecipe(@PathVariable("recipeId") Long recipeId) {
+        recipeService.deleteRecipe(recipeId);
     }
 }
