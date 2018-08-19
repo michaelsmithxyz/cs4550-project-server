@@ -39,7 +39,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK))
             .and().authorizeRequests()
                 .antMatchers("/login").permitAll()
-                .antMatchers("/api/**").authenticated();
+                .antMatchers("/api/user/me").authenticated()
+                .antMatchers("/api/**").permitAll();
     }
 
     @Override
