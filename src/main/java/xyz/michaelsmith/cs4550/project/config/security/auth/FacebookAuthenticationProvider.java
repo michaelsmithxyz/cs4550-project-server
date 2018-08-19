@@ -1,4 +1,4 @@
-package xyz.michaelsmith.cs4550.project.config.security;
+package xyz.michaelsmith.cs4550.project.config.security.auth;
 
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;

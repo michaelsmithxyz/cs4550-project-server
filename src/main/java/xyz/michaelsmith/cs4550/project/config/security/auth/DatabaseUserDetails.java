@@ -1,4 +1,4 @@
-package xyz.michaelsmith.cs4550.project.config.security;
+package xyz.michaelsmith.cs4550.project.config.security.auth;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

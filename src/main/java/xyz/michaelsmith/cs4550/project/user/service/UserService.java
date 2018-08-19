@@ -7,31 +7,33 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import xyz.michaelsmith.cs4550.project.common.dto.mapper.DtoMapper;
-import xyz.michaelsmith.cs4550.project.config.security.DatabaseUserDetails;
+import xyz.michaelsmith.cs4550.project.config.security.auth.DatabaseUserDetails;
+import xyz.michaelsmith.cs4550.project.config.security.util.AuthenticationUtils;
 import xyz.michaelsmith.cs4550.project.user.data.UserRepository;
 import xyz.michaelsmith.cs4550.project.user.data.entity.User;
 import xyz.michaelsmith.cs4550.project.user.data.entity.UserRole;
 import xyz.michaelsmith.cs4550.project.user.dto.UserDto;
+import xyz.michaelsmith.cs4550.project.user.dto.UserRegistrationDto;
 
 import java.util.List;
 import java.util.function.Supplier;
 
 import static java.util.Collections.singletonList;
-import static java.util.stream.Collectors.reducing;
 import static java.util.stream.Collectors.toList;
 
 @Service
 public class UserService {
     private final DtoMapper<User, UserDto> userDtoMapper;
-
     private final UserRepository userRepository;
+    private final AuthenticationUtils authenticationUtils;
 
     private static final Supplier<? extends RuntimeException> USER_NOT_FOUND_EXCEPTION = () -> new IllegalArgumentException("No user found for ID");
 
     @Autowired
-    public UserService(DtoMapper<User, UserDto> userDtoMapper, UserRepository userRepository) {
+    public UserService(DtoMapper<User, UserDto> userDtoMapper, UserRepository userRepository, AuthenticationUtils authenticationUtils) {
         this.userDtoMapper = userDtoMapper;
         this.userRepository = userRepository;
+        this.authenticationUtils = authenticationUtils;
     }
 
     public UserDto getUser() {
@@ -40,6 +42,23 @@ public class UserService {
             return userDtoMapper.map(((DatabaseUserDetails) principal).getUser());
         }
         return userDtoMapper.map((User) principal);
+    }
+
+    public UserDto registerUser(UserRegistrationDto registrationDto) {
+        if (registrationDto.getEmail() == null || registrationDto.getPassword() == null) {
+            throw new IllegalArgumentException("Missing required fields");
+        }
+        if (userRepository.findByEmail(registrationDto.getEmail()).isPresent()) {
+            throw new IllegalArgumentException("User exists with email");
+        }
+        User user = new User();
+        user.setName(registrationDto.getName());
+        user.setEmail(registrationDto.getEmail());
+        user.setRole(registrationDto.getRole());
+
+        user = userRepository.save(user);
+        authenticationUtils.authUser(user);
+        return userDtoMapper.map(user);
     }
 
     public void updateUserRole(UserRole role) {
