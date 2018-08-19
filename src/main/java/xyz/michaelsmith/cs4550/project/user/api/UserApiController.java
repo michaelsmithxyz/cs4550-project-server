@@ -88,6 +88,16 @@ public class UserApiController {
         }
     }
 
+    @RequestMapping(path = "/{userId}",
+                    method = DELETE)
+    public void deleteUser(@PathVariable("userId") Long userId) {
+        try {
+            userService.deleteUser(userId);
+        } catch (IllegalArgumentException ex) {
+            throw new ResourceNotFoundException(ex.getMessage());
+        }
+    }
+
     @RequestMapping(path = "/{userId}/followers",
                     method = GET,
                     produces = APPLICATION_JSON_VALUE)

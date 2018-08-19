@@ -84,6 +84,15 @@ public class UserService {
         return userRepository.findById(userId).map(userDtoMapper::map).orElseThrow(USER_NOT_FOUND_EXCEPTION);
     }
 
+    public void deleteUser(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(USER_NOT_FOUND_EXCEPTION);
+        user.getFollowing().clear();
+        user.getFollowedBy().clear();
+
+        user = userRepository.save(user);
+        userRepository.delete(user);
+    }
+
     public List<UserDto> getFollowersForUser(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(USER_NOT_FOUND_EXCEPTION);
         return user.getFollowedBy().stream().map(userDtoMapper::map).collect(toList());

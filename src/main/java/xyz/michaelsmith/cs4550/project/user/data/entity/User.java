@@ -1,5 +1,7 @@
 package xyz.michaelsmith.cs4550.project.user.data.entity;
 
+import xyz.michaelsmith.cs4550.project.recipe.data.entity.Recipe;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -35,6 +37,9 @@ public class User {
                joinColumns = @JoinColumn(name = "follower_id"),
                inverseJoinColumns = @JoinColumn(name = "target_id"))
     private List<User> following;
+
+    @OneToMany(mappedBy = "author", cascade = CascadeType.REMOVE)
+    private List<Recipe> recipes;
 
     public Long getId() {
         return id;
@@ -114,5 +119,13 @@ public class User {
 
     public void setJoined(Date joined) {
         this.joined = joined;
+    }
+
+    public List<Recipe> getRecipes() {
+        return recipes;
+    }
+
+    public void setRecipes(List<Recipe> recipes) {
+        this.recipes = recipes;
     }
 }
