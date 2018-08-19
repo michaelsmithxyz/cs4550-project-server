@@ -1,9 +1,12 @@
 CREATE TABLE recipe (
   id INT PRIMARY KEY AUTO_INCREMENT,
   title VARCHAR(255) NOT NULL,
+  description TEXT DEFAULT NULL,
+  image VARCHAR(255) DEFAULT NULL,
   author_id INT REFERENCES app_user,
   duration VARCHAR(255) DEFAULT NULL,
-  yield VARCHAR(255) DEFAULT NULL
+  yield VARCHAR(255) DEFAULT NULL,
+  created DATE DEFAULT NULL
 );
 
 CREATE TABLE recipe_ingredient_map (

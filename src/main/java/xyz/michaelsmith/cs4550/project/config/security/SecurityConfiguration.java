@@ -9,7 +9,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import xyz.michaelsmith.cs4550.project.config.security.auth.*;
 import xyz.michaelsmith.cs4550.project.user.data.UserRepository;

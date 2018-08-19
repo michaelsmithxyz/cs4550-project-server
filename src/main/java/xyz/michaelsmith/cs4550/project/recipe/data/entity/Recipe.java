@@ -4,6 +4,7 @@ import xyz.michaelsmith.cs4550.project.user.data.entity.User;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -14,6 +15,8 @@ public class Recipe {
     private Long id;
 
     private String title;
+    private String description;
+    private String image;
 
     @ManyToOne
     @JoinColumn(name = "author_id")
@@ -21,6 +24,7 @@ public class Recipe {
 
     private String duration;
     private String yield;
+    private Date created;
 
     @OneToMany(mappedBy = "recipe", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<RecipeIngredientMap> ingredients = new ArrayList<>();
@@ -92,5 +96,29 @@ public class Recipe {
     public void addIngredient(RecipeIngredientMap ingredient) {
         this.ingredients.add(ingredient);
         ingredient.setRecipe(this);
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
     }
 }
