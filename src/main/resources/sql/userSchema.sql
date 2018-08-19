@@ -5,7 +5,8 @@ CREATE TABLE app_user (
   name VARCHAR(255) NOT NULL,
   email VARCHAR(255) DEFAULT NULL,
   password VARCHAR(255) DEFAULT NULL,
-  profile_picture BLOB DEFAULT NULL
+  profile_picture BLOB DEFAULT NULL,
+  joined DATE DEFAULT NULL
 );
 
 CREATE TABLE user_follower_map (

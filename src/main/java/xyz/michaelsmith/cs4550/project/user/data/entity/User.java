@@ -1,6 +1,7 @@
 package xyz.michaelsmith.cs4550.project.user.data.entity;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -20,6 +21,8 @@ public class User {
 
     @Lob
     private byte[] profilePicture;
+
+    private Date joined;
 
     @ManyToMany
     @JoinTable(name = "user_follower_map",
@@ -103,5 +106,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Date getJoined() {
+        return joined;
+    }
+
+    public void setJoined(Date joined) {
+        this.joined = joined;
     }
 }

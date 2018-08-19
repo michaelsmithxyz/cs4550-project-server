@@ -15,6 +15,8 @@ import org.springframework.social.facebook.api.User;
 import org.springframework.social.facebook.api.impl.FacebookTemplate;
 import xyz.michaelsmith.cs4550.project.user.data.UserRepository;
 
+import java.util.Date;
+
 import static java.util.Collections.singletonList;
 
 public class FacebookAuthenticationProvider implements AuthenticationProvider {
@@ -59,6 +61,7 @@ public class FacebookAuthenticationProvider implements AuthenticationProvider {
             appUser.setName(facebookUser.getName());
             appUser.setEmail(facebookUser.getEmail());
             appUser.setProfilePicture(facebook.userOperations().getUserProfileImage(ImageType.LARGE));
+            appUser.setJoined(new Date());
             return userRepository.save(appUser);
         }
         return appUser;

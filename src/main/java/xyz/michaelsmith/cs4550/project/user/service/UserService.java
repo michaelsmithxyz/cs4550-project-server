@@ -15,6 +15,7 @@ import xyz.michaelsmith.cs4550.project.user.data.entity.UserRole;
 import xyz.michaelsmith.cs4550.project.user.dto.UserDto;
 import xyz.michaelsmith.cs4550.project.user.dto.UserRegistrationDto;
 
+import java.util.Date;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -56,6 +57,7 @@ public class UserService {
         user.setEmail(registrationDto.getEmail());
         user.setRole(registrationDto.getRole());
         user.setPassword(registrationDto.getPassword());
+        user.setJoined(new Date());
 
         user = userRepository.save(user);
         authenticationUtils.authUser(user);
