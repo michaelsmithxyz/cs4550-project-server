@@ -14,6 +14,7 @@ import xyz.michaelsmith.cs4550.project.user.data.entity.User;
 import xyz.michaelsmith.cs4550.project.user.service.UserService;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -54,9 +55,12 @@ public class RecipeService {
 
         Recipe recipe = new Recipe();
         recipe.setTitle(recipeDto.getTitle());
+        recipe.setDescription(recipeDto.getDescription());
+        recipe.setImage(recipeDto.getImage());
         recipe.setAuthor(currentUser);
         recipe.setDuration(recipeDto.getDuration());
         recipe.setYield(recipeDto.getYield());
+        recipe.setCreated(new Date());
 
         buildRecipeIngredients(recipe, recipeDto);
 
@@ -69,6 +73,8 @@ public class RecipeService {
     public RecipeDto updateRecipe(Long recipeId, RecipeDto recipeDto) {
         Recipe recipe = recipeRepository.findById(recipeId).orElseThrow(RECIPE_NOT_FOUND);
         recipe.setTitle(recipeDto.getTitle());
+        recipe.setDescription(recipeDto.getDescription());
+        recipe.setImage(recipeDto.getImage());
         recipe.setDuration(recipeDto.getDuration());
         recipe.setYield(recipeDto.getYield());
 
