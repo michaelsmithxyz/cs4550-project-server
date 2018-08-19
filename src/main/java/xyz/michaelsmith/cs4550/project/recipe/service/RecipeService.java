@@ -45,6 +45,10 @@ public class RecipeService {
         return recipeRepository.findById(recipeId).map(recipeDtoMapper::map).orElseThrow(RECIPE_NOT_FOUND);
     }
 
+    public List<RecipeDto> searchRecipesByTitle(String title) {
+        return recipeRepository.findByTitleContainingIgnoreCase(title).stream().map(recipeDtoMapper::map).collect(toList());
+    }
+
     public RecipeDto createRecipe(RecipeDto recipeDto) {
         User currentUser = userService.getUserEntity();
 

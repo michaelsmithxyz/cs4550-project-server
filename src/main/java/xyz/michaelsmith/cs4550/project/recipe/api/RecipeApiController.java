@@ -1,9 +1,6 @@
 package xyz.michaelsmith.cs4550.project.recipe.api;
 
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping   ;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import xyz.michaelsmith.cs4550.project.common.api.exception.ResourceNotFoundException;
 import xyz.michaelsmith.cs4550.project.recipe.dto.RecipeDto;
 import xyz.michaelsmith.cs4550.project.recipe.service.RecipeService;
@@ -27,6 +24,14 @@ public class RecipeApiController {
                     produces = APPLICATION_JSON_VALUE)
     public List<RecipeDto> getAll() {
         return recipeService.getAll();
+    }
+
+    @RequestMapping(path = {"", "/"},
+                    method = GET,
+                    params = {"title"},
+                    produces = APPLICATION_JSON_VALUE)
+    public List<RecipeDto> searchByTitle(@RequestParam("title") String title) {
+        return recipeService.searchRecipesByTitle(title);
     }
 
     @RequestMapping(path = "/{recipeId}",
