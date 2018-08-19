@@ -3,6 +3,7 @@ package xyz.michaelsmith.cs4550.project.recipe.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import xyz.michaelsmith.cs4550.project.common.dto.mapper.DtoMapper;
+import xyz.michaelsmith.cs4550.project.ingredient.dto.IngredientDto;
 import xyz.michaelsmith.cs4550.project.ingredient.service.IngredientService;
 import xyz.michaelsmith.cs4550.project.recipe.data.RecipeRepository;
 import xyz.michaelsmith.cs4550.project.recipe.data.entity.Recipe;
@@ -48,6 +49,11 @@ public class RecipeService {
 
     public List<RecipeDto> searchRecipesByTitle(String title) {
         return recipeRepository.findByTitleContainingIgnoreCase(title).stream().map(recipeDtoMapper::map).collect(toList());
+    }
+
+    public List<RecipeDto> searchRecipesByIngredient(Long ingredientId) {
+        IngredientDto ingredient = ingredientService.getIngredient(ingredientId);
+        return recipeRepository.searchByIngredient(ingredient.getId()).stream().map(recipeDtoMapper::map).collect(toList());
     }
 
     public RecipeDto createRecipe(RecipeDto recipeDto) {
