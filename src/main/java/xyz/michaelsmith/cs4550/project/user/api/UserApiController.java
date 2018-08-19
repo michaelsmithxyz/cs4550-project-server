@@ -39,6 +39,19 @@ public class UserApiController {
         return userService.getUser();
     }
 
+    @RequestMapping(path = "/me",
+                    method = PUT,
+                    consumes = APPLICATION_JSON_VALUE,
+                    produces = APPLICATION_JSON_VALUE)
+    public UserDto updateLoggedInUser(@RequestBody UserDto userDto) {
+        UserDto user = userService.getUser();
+        try {
+            return userService.updateUserProfile(user.getId(), userDto);
+        } catch (IllegalArgumentException ex) {
+            throw new ResourceNotFoundException(ex.getMessage());
+        }
+    }
+
     @RequestMapping(path = "/me/role",
                     method = PUT,
                     consumes = APPLICATION_JSON_VALUE)
@@ -83,6 +96,18 @@ public class UserApiController {
     public UserDto getUserById(@PathVariable("userId") Long userId) {
         try {
             return userService.getUser(userId);
+        } catch (IllegalArgumentException ex) {
+            throw new ResourceNotFoundException(ex.getMessage());
+        }
+    }
+
+    @RequestMapping(path = "/{userId}",
+                    method = PUT,
+                    consumes = APPLICATION_JSON_VALUE,
+                    produces = APPLICATION_JSON_VALUE)
+    public UserDto updateUserById(@PathVariable("userId") Long userId, @RequestBody UserDto userDto) {
+        try {
+            return userService.updateUserProfile(userId, userDto);
         } catch (IllegalArgumentException ex) {
             throw new ResourceNotFoundException(ex.getMessage());
         }
