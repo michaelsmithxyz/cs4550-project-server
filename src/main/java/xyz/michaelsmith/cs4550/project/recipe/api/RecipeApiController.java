@@ -46,6 +46,18 @@ public class RecipeApiController {
         }
     }
 
+    @RequestMapping(path = {"", "/"},
+            method = GET,
+            params = {"author"},
+            produces = APPLICATION_JSON_VALUE)
+    public List<RecipeDto> searchByAuthor(@RequestParam("author") Long userId) {
+        try {
+            return recipeService.searchRecipesByAuthor(userId);
+        } catch (IllegalArgumentException ex) {
+            throw new ResourceNotFoundException(ex.getMessage());
+        }
+    }
+
     @RequestMapping(path = "/{recipeId}",
                     method = GET,
                     produces = APPLICATION_JSON_VALUE)

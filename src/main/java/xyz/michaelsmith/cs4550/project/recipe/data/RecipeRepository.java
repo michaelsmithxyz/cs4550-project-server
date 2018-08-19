@@ -12,4 +12,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
     @Query("SELECT DISTINCT r FROM Recipe r INNER JOIN r.ingredients im INNER JOIN im.ingredient i WHERE i.id = :ingredientId")
     List<Recipe> searchByIngredient(@Param("ingredientId") Long ingredientId);
+
+    @Query("SELECT DISTINCT r FROM Recipe r INNER JOIN r.author a WHERE a.id = :userId")
+    List<Recipe> searchByAuthor(@Param("userId") Long userId);
 }

@@ -12,6 +12,7 @@ import xyz.michaelsmith.cs4550.project.recipe.data.entity.RecipeStep;
 import xyz.michaelsmith.cs4550.project.recipe.dto.RecipeDto;
 import xyz.michaelsmith.cs4550.project.recipe.dto.RecipeStepDto;
 import xyz.michaelsmith.cs4550.project.user.data.entity.User;
+import xyz.michaelsmith.cs4550.project.user.dto.UserDto;
 import xyz.michaelsmith.cs4550.project.user.service.UserService;
 
 import java.util.ArrayList;
@@ -54,6 +55,11 @@ public class RecipeService {
     public List<RecipeDto> searchRecipesByIngredient(Long ingredientId) {
         IngredientDto ingredient = ingredientService.getIngredient(ingredientId);
         return recipeRepository.searchByIngredient(ingredient.getId()).stream().map(recipeDtoMapper::map).collect(toList());
+    }
+
+    public List<RecipeDto> searchRecipesByAuthor(Long userId) {
+        UserDto user = userService.getUser(userId);
+        return recipeRepository.searchByAuthor(user.getId()).stream().map(recipeDtoMapper::map).collect(toList());
     }
 
     public RecipeDto createRecipe(RecipeDto recipeDto) {
