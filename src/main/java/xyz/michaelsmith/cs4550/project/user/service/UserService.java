@@ -7,6 +7,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import xyz.michaelsmith.cs4550.project.common.dto.mapper.DtoMapper;
+import xyz.michaelsmith.cs4550.project.config.security.DatabaseUserDetails;
 import xyz.michaelsmith.cs4550.project.user.data.UserRepository;
 import xyz.michaelsmith.cs4550.project.user.data.entity.User;
 import xyz.michaelsmith.cs4550.project.user.data.entity.UserRole;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import static java.util.Collections.singletonList;
+import static java.util.stream.Collectors.reducing;
 import static java.util.stream.Collectors.toList;
 
 @Service
@@ -33,7 +35,11 @@ public class UserService {
     }
 
     public UserDto getUser() {
-        return userDtoMapper.map((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof DatabaseUserDetails) {
+            return userDtoMapper.map(((DatabaseUserDetails) principal).getUser());
+        }
+        return userDtoMapper.map((User) principal);
     }
 
     public void updateUserRole(UserRole role) {

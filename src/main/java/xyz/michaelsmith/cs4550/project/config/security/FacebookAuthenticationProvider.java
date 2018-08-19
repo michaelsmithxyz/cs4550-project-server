@@ -53,6 +53,7 @@ public class FacebookAuthenticationProvider implements AuthenticationProvider {
             appUser = new xyz.michaelsmith.cs4550.project.user.data.entity.User();
             appUser.setFacebookId(facebookUser.getId());
             appUser.setName(facebookUser.getName());
+            appUser.setEmail(facebookUser.getEmail());
             appUser.setProfilePicture(facebook.userOperations().getUserProfileImage(ImageType.LARGE));
             return userRepository.save(appUser);
         }
