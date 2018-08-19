@@ -37,6 +37,10 @@ public class UserService {
         this.authenticationUtils = authenticationUtils;
     }
 
+    public List<UserDto> getAllUsers() {
+        return userRepository.findAll().stream().map(userDtoMapper::map).collect(toList());
+    }
+
     public UserDto getUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof DatabaseUserDetails) {

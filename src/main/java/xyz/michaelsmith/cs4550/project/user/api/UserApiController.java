@@ -1,6 +1,7 @@
 package xyz.michaelsmith.cs4550.project.user.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -68,6 +69,13 @@ public class UserApiController {
     }
 
     // General User operations
+
+    @RequestMapping(path = {"", "/"},
+                    method = GET,
+                    produces = APPLICATION_JSON_VALUE)
+    public List<UserDto> getAllUsers() {
+        return userService.getAllUsers();
+    }
 
     @RequestMapping(path = "/{userId}",
                     method = GET,
