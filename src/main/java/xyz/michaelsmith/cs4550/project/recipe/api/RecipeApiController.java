@@ -2,6 +2,7 @@ package xyz.michaelsmith.cs4550.project.recipe.api;
 
 import org.springframework.web.bind.annotation.*;
 import xyz.michaelsmith.cs4550.project.common.api.exception.ResourceNotFoundException;
+import xyz.michaelsmith.cs4550.project.recipe.dto.RecipeCommentDto;
 import xyz.michaelsmith.cs4550.project.recipe.dto.RecipeDto;
 import xyz.michaelsmith.cs4550.project.recipe.service.RecipeService;
 
@@ -97,5 +98,17 @@ public class RecipeApiController {
                     method = DELETE)
     public void deleteRecipe(@PathVariable("recipeId") Long recipeId) {
         recipeService.deleteRecipe(recipeId);
+    }
+
+    @RequestMapping(path = "/{recipeId}/comments",
+                    method = POST,
+                    consumes = APPLICATION_JSON_VALUE,
+                    produces = APPLICATION_JSON_VALUE)
+    public RecipeDto createComment(@PathVariable("recipeId") Long recipeId, @RequestBody RecipeCommentDto commentDto) {
+        try {
+            return recipeService.createComment(recipeId, commentDto);
+        } catch (IllegalArgumentException ex) {
+            throw new ResourceNotFoundException(ex.getMessage());
+        }
     }
 }

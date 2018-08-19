@@ -3,12 +3,15 @@ package xyz.michaelsmith.cs4550.project.recipe.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import xyz.michaelsmith.cs4550.project.common.dto.mapper.DtoMapper;
+import xyz.michaelsmith.cs4550.project.config.security.util.AuthenticationUtils;
 import xyz.michaelsmith.cs4550.project.ingredient.dto.IngredientDto;
 import xyz.michaelsmith.cs4550.project.ingredient.service.IngredientService;
 import xyz.michaelsmith.cs4550.project.recipe.data.RecipeRepository;
 import xyz.michaelsmith.cs4550.project.recipe.data.entity.Recipe;
+import xyz.michaelsmith.cs4550.project.recipe.data.entity.RecipeComment;
 import xyz.michaelsmith.cs4550.project.recipe.data.entity.RecipeIngredientMap;
 import xyz.michaelsmith.cs4550.project.recipe.data.entity.RecipeStep;
+import xyz.michaelsmith.cs4550.project.recipe.dto.RecipeCommentDto;
 import xyz.michaelsmith.cs4550.project.recipe.dto.RecipeDto;
 import xyz.michaelsmith.cs4550.project.recipe.dto.RecipeStepDto;
 import xyz.michaelsmith.cs4550.project.user.data.entity.User;
@@ -33,7 +36,7 @@ public class RecipeService {
     private static final Supplier<? extends RuntimeException> RECIPE_NOT_FOUND = () -> new IllegalArgumentException("Recipe not found for id");
 
     @Autowired
-    public RecipeService(UserService userService, IngredientService ingredientService, RecipeRepository recipeRepository, DtoMapper<Recipe, RecipeDto> recipeDtoMapper) {
+    public RecipeService(UserService userService, IngredientService ingredientService, RecipeRepository recipeRepository, DtoMapper<Recipe, RecipeDto> recipeDtoMapper, DtoMapper<RecipeComment, RecipeCommentDto> commentDtoMapper) {
         this.userService = userService;
         this.ingredientService = ingredientService;
         this.recipeRepository = recipeRepository;
@@ -101,6 +104,18 @@ public class RecipeService {
 
     public void deleteRecipe(Long recipeId) {
         recipeRepository.deleteById(recipeId);
+    }
+
+    public RecipeDto createComment(Long recipeId, RecipeCommentDto commentDto) {
+        Recipe recipe = recipeRepository.findById(recipeId).orElseThrow(RECIPE_NOT_FOUND);
+        RecipeComment comment = new RecipeComment();
+        comment.setAuthor(userService.getUserEntity());
+        comment.setPosted(new Date());
+        comment.setText(commentDto.getText());
+        comment.setRecipe(recipe);
+        recipe.getComments().add(comment);
+
+        return recipeDtoMapper.map(recipeRepository.save(recipe));
     }
 
     private static void buildRecipeSteps(Recipe recipe, RecipeDto recipeDto) {

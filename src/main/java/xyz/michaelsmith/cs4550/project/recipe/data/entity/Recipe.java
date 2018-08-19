@@ -32,6 +32,9 @@ public class Recipe {
     @OneToMany(mappedBy = "recipe", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<RecipeStep> steps = new ArrayList<>();
 
+    @OneToMany(mappedBy = "recipe", orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<RecipeComment> comments = new ArrayList<>();
+
     public Long getId() {
         return id;
     }
@@ -120,5 +123,13 @@ public class Recipe {
 
     public void setCreated(Date created) {
         this.created = created;
+    }
+
+    public List<RecipeComment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<RecipeComment> comments) {
+        this.comments = comments;
     }
 }

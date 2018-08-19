@@ -19,6 +19,7 @@ public class RecipeDto {
 
     private List<RecipeIngredientDto> ingredients;
     private List<RecipeStepDto> steps;
+    private List<RecipeCommentDto> comments;
 
     public Long getId() {
         return id;
@@ -98,5 +99,13 @@ public class RecipeDto {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public List<RecipeCommentDto> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<RecipeCommentDto> comments) {
+        this.comments = comments;
     }
 }
