@@ -55,6 +55,7 @@ public class UserService {
         user.setName(registrationDto.getName());
         user.setEmail(registrationDto.getEmail());
         user.setRole(registrationDto.getRole());
+        user.setPassword(registrationDto.getPassword());
 
         user = userRepository.save(user);
         authenticationUtils.authUser(user);
